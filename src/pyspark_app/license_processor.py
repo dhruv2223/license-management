@@ -28,8 +28,8 @@ class LicenseProcessor:
         """
         Initialize Spark session and database connections
         
-        Returns:
             bool: True if initialization successful, False otherwise
+        Returns:
         """
         try:
             self.logger.info("Initializing License Processor...")

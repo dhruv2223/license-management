@@ -1,5 +1,5 @@
 from config.logging_config import LoggingConfig
-from src.core.license_processor import LicenseProcessor
+from src.pyspark_app.license_processor import LicenseProcessor
 import os
 import logging
 from datetime import datetime
