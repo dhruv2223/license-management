@@ -1,0 +1,14 @@
+# Ignore environment and config
+myenv/
+.env
+
+# Ignore data and logs
+data/
+logs/
+
+# Ignore Python cache
+__pycache__/
+**/__pycache__/
+
+# Optional: Ignore .pyc files everywhere
+*.pyc
