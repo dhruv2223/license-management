@@ -1,7 +1,6 @@
 from config.logging_config import LoggingConfig
 from src.pyspark_app.license_processor import LicenseProcessor
 import os
-import logging
 from datetime import datetime
 
 def main():
@@ -17,30 +16,35 @@ def main():
         enable_console=True
     )
     
+    # Get logger for this module
+    logger = LoggingConfig.get_logger(__name__)
+    
     processor = None
     
     try:
         # Initialize License Processor
-        processor = LicenseProcessor()
+        processor = LicenseProcessor(logger=logger)
         
         if not processor.initialize():
-            logging.error("Failed to initialize License Processor")
+            logger.error("Failed to initialize License Processor")
             return False
         
         # Test connections
         if not processor.test_connections():
-            logging.error("Database connection tests failed")
+            logger.error("Database connection tests failed")
             return False
         
-        logging.info("Step 1.1 Environment Setup completed successfully!")
+        logger.info("Step 1.1 Environment Setup completed successfully!")
         
         # Placeholder for future steps
-        logging.info("Ready for Step 1.2 - Database Schema Implementation")
+    
+        processor.run_pending_license_request_job() 
+        processor.run_expired_license_job()
+        return True 
         
-        return True
         
     except Exception as e:
-        logging.error(f"Application error: {str(e)}")
+        logger.error(f"Application error: {str(e)}")
         return False
         
     finally:

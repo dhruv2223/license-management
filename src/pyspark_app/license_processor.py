@@ -4,6 +4,9 @@ from typing import Optional
 from config.spark_config import SparkConfigManager
 from config.database_config import DatabaseConfig
 from config.logging_config import LoggingConfig
+from src.pyspark_app.process_pending_requests import PendingLicenseRequestProcessor 
+from src.pyspark_app.process_expired_licenses import LicenseStatusUpdater
+from src.pyspark_app.user_count_by_license_type import LicenseUserCounter
 
 class LicenseProcessor:
     """
@@ -11,7 +14,7 @@ class LicenseProcessor:
     Handles Spark session lifecycle and database connections
     """
     
-    def __init__(self, app_name: str = "LicenseManagementPipeline"):
+    def __init__(self, app_name: str = "LicenseManagementPipeline",logger=None):
         """
         Initialize License Processor
         
@@ -22,7 +25,7 @@ class LicenseProcessor:
         self.spark: Optional[SparkSession] = None
         self.client_db_props = None
         self.kaksha_db_props = None
-        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger = logger or logging.getLogger(self.__class__.__name__)
         
     def initialize(self) -> bool:
         """
@@ -42,8 +45,8 @@ class LicenseProcessor:
             # Get database properties
             self.client_db_props = DatabaseConfig.get_client_db_properties()
             self.kaksha_db_props = DatabaseConfig.get_kaksha_db_properties()
-            
             # Create Spark session
+
             self.spark = SparkConfigManager.create_spark_session(self.app_name)
             
             self.logger.info("License Processor initialized successfully")
@@ -99,3 +102,30 @@ class LicenseProcessor:
         except Exception as e:
             self.logger.error(f"Database connection test failed: {str(e)}")
             return False
+    def run_pending_license_request_job(self):
+    
+        
+        processor = PendingLicenseRequestProcessor(
+            spark=self.spark,
+            client_db_config=self.client_db_props,
+            kaksha_db_config=self.kaksha_db_props
+        )
+        
+        processor.run()
+        self.logger.info("Step 1.3a: Processed pending license requests successfully") 
+    def run_expired_license_job(self):
+        """
+        Run the job to process expired licenses
+        """
+        updater = LicenseStatusUpdater(
+            spark=self.spark,
+            kaksha_db_config=self.kaksha_db_props
+        )
+        
+        updater.run()
+        self.logger.info("Step 1.3b: Processed expired licenses successfully") 
+    def count_user_license_by_type(self): 
+        
+        counter = LicenseUserCounter(spark=self.spark,kaksha_db_config=self.kaksha_db_props) 
+        counter.run()
+        
