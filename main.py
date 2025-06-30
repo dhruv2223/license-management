@@ -39,7 +39,14 @@ def main():
         # Placeholder for future steps
     
         processor.run_pending_license_request_job() 
-        processor.run_expired_license_job()
+
+        logger.info("Step 1.2 run pending license request completed successfully!")
+        processor.run_expired_license_job() 
+
+        logger.info("Step 1.3 run expired license job completed successfully!")
+        processor.count_user_license_by_type()
+
+        logger.info("count user by license type completed successfully!")
         return True 
         
         

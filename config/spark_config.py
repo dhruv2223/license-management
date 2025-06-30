@@ -59,7 +59,9 @@ class SparkConfigManager:
         """
         config = SparkConfigManager.get_optimized_spark_config()
         
-        builder = SparkSession.builder.appName(app_name)
+        builder = SparkSession.builder \
+            .appName(app_name) \
+            .master(os.getenv("SPARK_MASTER_URL", "local[*]"))
         
         # Apply all configurations
         for key, value in config.items():

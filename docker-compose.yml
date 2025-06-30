@@ -1,0 +1,109 @@
+version: "3.8"
+services:
+  spark-master:
+    image: bitnami/spark:3.4
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    networks:
+      - your_network
+
+  spark-worker-1:
+    image: bitnami/spark:3.4
+    container_name: spark-worker-1
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    ports:
+      - "8081:8081"
+    networks:
+      - your_network
+
+  spark-worker-2:
+    image: bitnami/spark:3.4
+    container_name: spark-worker-2
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    networks:
+      - your_network
+
+  license-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: license-app
+    depends_on:
+      - spark-master
+      - spark-worker-1
+      - spark-worker-2
+      - client-db
+      - kaksha-db
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    command: ["python", "main.py"]
+    networks:
+      - your_network
+
+  client-db:
+    image: postgres:14-alpine
+    container_name: client-db
+    environment:
+      - POSTGRES_DB=clientdb
+      - POSTGRES_USER=client_user
+      - POSTGRES_PASSWORD=client_pass
+    volumes:
+      - client-db-data:/var/lib/postgresql/data
+      - ./db/init/client_schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - your_network
+
+  kaksha-db:
+    image: postgres:14-alpine
+    container_name: kaksha-db
+    environment:
+      - POSTGRES_DB=kakshadb
+      - POSTGRES_USER=kaksha_user
+      - POSTGRES_PASSWORD=kaksha_pass
+    volumes:
+      - kaksha-db-data:/var/lib/postgresql/data
+      - ./db/init/kaksha_schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5433:5432"
+    networks:
+      - your_network
+
+  license-flow:
+    build:
+      context: .
+      dockerfile: Dockerfile.prefect # or Dockerfile.prefect
+    container_name: license-flow
+    command: python prefect_flow.py
+    depends_on:
+      - client-db
+      - kaksha-db
+      - spark-master
+      - spark-worker-1
+      - spark-worker-2
+    networks:
+      - your_network
+
+volumes:
+  client-db-data:
+  kaksha-db-data:
+
+networks:
+  your_network:
+    driver: bridge

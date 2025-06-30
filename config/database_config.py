@@ -15,9 +15,9 @@ class DatabaseConfig:
         Returns Client DB connection properties
         """
         return {
-            "url": os.getenv("CLIENT_DB_URL", "jdbc:postgresql://localhost:5432/client_db"),
-            "dbname": "client_db",  # ✅ ADD THIS
-            "host": "localhost",    # ✅ ADD THIS
+            "url": os.getenv("CLIENT_DB_URL", "jdbc:postgresql://client-db:5432/clientdb"),
+            "dbname": "clientdb",  # ✅ ADD THIS
+            "host": os.getenv("CLIENT_DB_HOST", "client-db"),
             "port": "5432",
             "user": os.getenv("CLIENT_DB_USER", "postgres"),
             "password": os.getenv("CLIENT_DB_PASSWORD", "Cdhruv@1234"),
@@ -34,12 +34,12 @@ class DatabaseConfig:
         Returns Kaksha DB connection properties
         """
         return {
-            "url": os.getenv("KAKSHA_DB_URL", "jdbc:postgresql://localhost:5433/kaksha_db"),
+            "url": os.getenv("KAKSHA_DB_URL", "jdbc:postgresql://kaksha-db:5432/kakshadb"),
             "user": os.getenv("KAKSHA_DB_USER", "postgres"), 
             "password": os.getenv("KAKSHA_DB_PASSWORD", "Cdhruv@1234"),
             "driver": "org.postgresql.Driver",
-            "dbname": "kaksha_db",
-            "host": "localhost",
+            "dbname": "kakshadb",
+            "host": os.getenv("KAKSHA_DB_HOST", "kaksha-db"),
             "port": "5432",
             "ssl": "false", 
             "sslmode": "prefer",
