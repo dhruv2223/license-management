@@ -26,7 +26,7 @@ def main():
         processor = LicenseProcessor(logger=logger)
         
         if not processor.initialize():
-            logger.error("Failed to initialize License Processor")
+
             return False
         
         # Test connections

@@ -19,8 +19,8 @@ class DatabaseConfig:
             "dbname": "clientdb",  # ✅ ADD THIS
             "host": os.getenv("CLIENT_DB_HOST", "client-db"),
             "port": "5432",
-            "user": os.getenv("CLIENT_DB_USER", "postgres"),
-            "password": os.getenv("CLIENT_DB_PASSWORD", "Cdhruv@1234"),
+            "user": os.getenv("CLIENT_DB_USER", "client_user"),
+            "password": os.getenv("CLIENT_DB_PASSWORD", "client_pass"),
             "driver": "org.postgresql.Driver",
             "ssl": "false",
             "sslmode": "prefer",
@@ -36,7 +36,7 @@ class DatabaseConfig:
         return {
             "url": os.getenv("KAKSHA_DB_URL", "jdbc:postgresql://kaksha-db:5432/kakshadb"),
             "user": os.getenv("KAKSHA_DB_USER", "postgres"), 
-            "password": os.getenv("KAKSHA_DB_PASSWORD", "Cdhruv@1234"),
+            "password": os.getenv("KAKSHA_DB_PASSWORD", "kaksha_pass"),
             "driver": "org.postgresql.Driver",
             "dbname": "kakshadb",
             "host": os.getenv("KAKSHA_DB_HOST", "kaksha-db"),

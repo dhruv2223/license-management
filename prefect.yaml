@@ -1,0 +1,28 @@
+name: license-management-system
+prefect-version: 3.4.7
+
+build:
+  image: license-management-system-license-flow:latest
+  context: .
+  dockerfile: Dockerfile
+  includes:
+    - prefect_flow.py
+    - requirements.txt
+    - prefect.yaml
+
+push: false
+
+pull:
+  prefect.deployments.steps.set_working_directory:
+    directory: /app
+
+deployments:
+  - name: daily-license-flow
+    description: "Scheduled license management pipeline"
+    schedule:
+      cron: "0 7 * * *"
+    flow_name: license_flow
+    entrypoint: prefect_flow.py:license_flow
+    work_pool:
+      name: process-pool
+    path: /app
