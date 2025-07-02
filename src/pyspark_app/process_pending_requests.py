@@ -218,8 +218,6 @@ class PendingLicenseRequestProcessor:
             if not rejected_requests_df.rdd.isEmpty() else 0
         )
 
-        print(f"✅ Processed {approved_count} license requests")
-        print(f"❌ Rejected {rejected_count} license requests")
 
         print("\n📊 Current License Distribution:")
         license_counts_df = self.get_license_counts_by_type()
