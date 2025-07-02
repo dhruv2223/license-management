@@ -1,14 +1,7 @@
 name: license-management-system
 prefect-version: 3.4.7
 
-build:
-  image: license-management-system-license-flow:latest
-  context: .
-  dockerfile: Dockerfile
-  includes:
-    - prefect_flow.py
-    - requirements.txt
-    - prefect.yaml
+build: null # ⛔️ Skip auto build
 
 push: false
 

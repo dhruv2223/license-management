@@ -27,14 +27,18 @@ CREATE INDEX IF NOT EXISTS idx_user_licence_requests_userid ON user_licence_requ
 
 -- Insert sample license requests
 INSERT INTO user_licence_requests (userid, request_status, license_type, product_name, requested_at) VALUES
-('user005', 'PENDING', 'Type 1', 'Professional Suite', '2024-01-15 10:00:00'),
-('user003', 'PENDING', 'Type 2', 'Analytics Pro', '2024-01-14 11:30:00'),
-('user002', 'APPROVED', 'Type 3', 'Enterprise Suite', '2024-01-13 14:15:00'),
-('user001', 'PROCESSING', 'Type 1', 'Advanced Tools', '2024-01-12 09:45:00'),
-('user004', 'REJECTED', 'Type 2', 'Premium Features', '2024-01-11 16:30:00')
+('user019', 'PENDING', 'Type 1', 'Professional Suite', '2024-01-16 09:00:00'),
+('user020', 'PENDING', 'Type 2', 'Analytics Pro', '2024-01-16 10:30:00'),
+('user021', 'PROCESSING', 'Type 1', 'Professional Suite', '2024-01-15 14:45:00'),
+('user033', 'PENDING', 'Type 1', 'Educational Suite', '2024-01-14 16:20:00'),
+('user035', 'APPROVED', 'Type 2', 'Healthcare Analytics', '2024-01-13 11:15:00'),
+('user037', 'PENDING', 'Type 2', 'Government Analytics', '2024-01-12 13:30:00'),
+('user044', 'REJECTED', 'Type 3', 'Enterprise Suite', '2024-01-11 15:45:00'),
+('user046', 'PENDING', 'Type 1', 'Student Suite', '2024-01-10 12:00:00'),
+('user047', 'PROCESSING', 'Type 1', 'Intern Package', '2024-01-09 10:15:00')
 ON CONFLICT DO NOTHING;
 
 -- Grant permissions
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO client_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO client_user;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO client_user;
