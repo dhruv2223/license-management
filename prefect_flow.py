@@ -75,4 +75,4 @@ def license_flow():
 
 # ---------- For Local Testing ----------
 if __name__ == "__main__":
-    license_flow_v2()
+    license_flow()

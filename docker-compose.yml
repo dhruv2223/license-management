@@ -94,29 +94,6 @@ services:
     depends_on:
       - prefect-db
 
-  prefect-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: prefecthq/prefect:3.4.7-python3.9
-    container_name: prefect-worker
-    depends_on:
-      - prefect-server
-    environment:
-      - PREFECT_API_URL=http://prefect-server:4200/api
-    command: >
-      bash -c "  
-      apt update;
-      apt install curl -y;
-      echo 'Waiting for Prefect Server...';
-      until curl http://prefect-server:4200/api/health | grep -i 'true'; do
-      sleep 2;
-      done;
-      prefect worker start --pool process-pool 
-      "
-    networks:
-      - your_network
-
   license-flow:
     build:
       context: .
@@ -128,7 +105,6 @@ services:
       - spark-worker-2
       - client-db
       - kaksha-db
-      - prefect-worker
     env_file:
       - .env
     environment:
