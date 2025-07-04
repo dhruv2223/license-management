@@ -95,6 +95,9 @@ services:
       - prefect-db
 
   prefect-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: prefecthq/prefect:3.4.7-python3.9
     container_name: prefect-worker
     depends_on:
